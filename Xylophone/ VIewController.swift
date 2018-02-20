@@ -24,14 +24,14 @@ class ViewController: UIViewController{
 
     @IBAction func notePressed(_ sender: UIButton) {
         //Although the music buttons have the same IBAction, the tag property differentiates each button
+        //This entire code within this function is reponsible for playing sound at button press
+        
         var soundArray = ["note1", "note2", "note3", "note4", "note5", "note6", "note7"]
-        let url = Bundle.main.url(forResource: "note1", withExtension: "wav")
+        let url = Bundle.main.url(forResource: soundArray[sender.tag - 1], withExtension: "wav")
         
         do {
             try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
             try AVAudioSession.sharedInstance().setActive(true)
-            
-            
             
             /* The following line is required for the player to work on iOS 11. Change the file type accordingly*/
             player = try AVAudioPlayer(contentsOf: url!)
