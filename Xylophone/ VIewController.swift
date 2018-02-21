@@ -10,10 +10,9 @@ import UIKit
 import AVFoundation
 
 
-class ViewController: UIViewController{
+class ViewController: UIViewController, AVAudioPlayerDelegate {
     // Create global instance for audio player
-    
-    var player: AVAudioPlayer?
+    var audioPlayer: AVAudioPlayer!
     
 
     override func viewDidLoad() {
@@ -25,27 +24,20 @@ class ViewController: UIViewController{
     @IBAction func notePressed(_ sender: UIButton) {
         //Although the music buttons have the same IBAction, the tag property differentiates each button
         //This entire code within this function is reponsible for playing sound at button press
+        //This is the space where I create & play the url for each of the sound files.
+        //bundles are used to locate and use other resources, in this case use a URL to play sound files
         
-        var soundArray = ["note1", "note2", "note3", "note4", "note5", "note6", "note7"]
-        let url = Bundle.main.url(forResource: soundArray[sender.tag - 1], withExtension: "wav")
+        var soundList = ["note1", "note2", "note3", "note4", "note5", "note6", "note7"]
+        let soundURL: URL? = Bundle.main.url(forResource: soundList[sender.tag - 1], withExtension: "wav")
         
         do {
-            try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
-            try AVAudioSession.sharedInstance().setActive(true)
-            
-            /* The following line is required for the player to work on iOS 11. Change the file type accordingly*/
-            player = try AVAudioPlayer(contentsOf: url!)
-            
-            /* iOS 10 and earlier require the following line:
-             player = try AVAudioPlayer(contentsOf: url, fileTypeHint: AVFileTypeMPEGLayer3) */
-            
-            guard let player = player else { return }
-            
-            player.play()
-            
-        } catch let error {
+            audioPlayer = try AVAudioPlayer(contentsOf: soundURL!)
+        }
+        catch {
             print(error.localizedDescription)
         }
+        
+        audioPlayer.play()
             
     }
         
